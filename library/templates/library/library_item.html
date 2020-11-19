@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-libraryitem{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ page.title }}
+    </h1>
+
+    Authored by:
+    {% for author in page.specific.authors.all %}
+        <a href="{% pageurl author.author %}">{{ author.author }}</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
+
+    {% include_block page.body %}
+
+    <dl>
+        <dt>
+            Audience:
+        </dt>
+        <dd>
+            <a href="{% pageurl page.specific.item_audience %}">
+                {{ page.specific.item_audience }}
+            </a>
+        </dd>
+
+
+
+        <dt>
+            Genre:
+        </dt>
+        <dd>
+            <a href="{% pageurl page.specific.item_genre %}">
+                {{ page.specific.item_genre }}
+            </a>
+        </dd>
+
+
+        <dt>
+            Medium:
+        </dt>
+        <dd>
+            <a href="{% pageurl page.specific.item_medium %}">
+                {{ page.specific.item_medium }}
+            </a>
+        </dd>
+
+
+        <dt>
+            Time period:
+        </dt>
+        <dd>
+            <a href="{% pageurl page.specific.item_time_period %}">
+                {{ page.specific.item_time_period }}
+            </a>
+        </dd>
+
+        <dt>
+            Topic
+        </dt>
+        
+        <dd>
+        {% for topic in page.specific.topics.all %}
+            
+                <a href="{% pageurl topic.topic %}">
+                    {{ topic.topic }}
+                </a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        </dd>
+    </dl>
+{% endblock %}

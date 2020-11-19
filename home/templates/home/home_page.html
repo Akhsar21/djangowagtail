@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+    <h1>{{ page.title }}</h1>
+
+    {{ page.intro|richtext }}
+
+    <div class="row">
+        <div class="col-sm-7">
+            {% if page.featured_articles.count %}
+                <h2>Featured articles</h2>
+                {% for article in page.featured_articles.all %}
+                    {% include "magazine/magazine_article_summary.html" with article=article.article %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-sm-5">
+            {% if current_issue %}
+                <h2>Current Issue</h2>
+
+                <a href="{% pageurl current_issue %}">
+                    <h3>
+                        {{ current_issue.title }}
+                    </h3>
+                    <br />
+                    {% image current_issue.cover_image max-320x200 %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-magazineindexpage{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ page.title }}
+    </h1>
+
+    <div class="intro">
+        {{ page.intro | richtext }}
+    </div>
+
+    {% if events %}
+        <h2>Upcoming events</h2>
+
+        <div class="list-group">
+            {% for event in events %}
+                {% if event.website %}
+                    <a href="{{ event.website }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h3 class="mb-1">{{ event.title }}</h3>
+                            <small>{{ event.date }}</small>
+                        </div>
+                        {% if event.description %}
+                            <span>
+                                {{ event.description | richtext }}
+                            </span>
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h3 class="mb-1">{{ event.title }}</h3>
+                            <small>{{ event.date }}</small>
+                        </div>
+                        {% if event.description %}
+                            <span>
+                                {{ event.description | richtext }}
+                            </span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+         </div>
+
+         <div class="step-links ml-3 mt-1 text-center">
+            {% if events.has_previous %}
+                <a href="?page={{ events.previous_page_number }}" class="btn btn-outline-primary btn-sm">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ events.number }} of {{ events.paginator.num_pages }}
+            </span>
+
+            {% if events.has_next %}
+                <a href="?page={{ events.next_page_number }}" class="btn btn-outline-primary btn-sm">next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>There are no events events</p>
+    {% endif %}
+{% endblock %}

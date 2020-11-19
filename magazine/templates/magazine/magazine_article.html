@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% load user_is_subscriber %}
+
+{% block body_class %}template-magazinearticlepage{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ page.title }}
+    </h1>
+
+    {% if page.authors.count %}
+        <ul class="list-inline mb-1">
+            <li class="list-inline-item">Authored by:</li>
+            {% for author in page.authors.all %}
+                <li class="list-inline-item">
+                    <a href="{% pageurl author.author %}">
+                        {{ author.author.title }}
+                    </a>{% if not forloop.last %},{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if page.department %}
+        <div class="mb-2">
+            Department:&nbsp;
+            <a href="{% pageurl page.department %}">
+                {{ page.department }}
+            </a>
+        </div>
+    {% endif %}
+
+    {% if page.tags.all.count %}
+        <div class="tags">
+            {% for tag in page.tags.all %}
+                <a
+                    href="{% slugurl 'tags' %}?tag={{ tag }}"
+                    class="btn btn-outline-primary btn-sm">
+                    {{ tag }}
+                </a>
+            {% endfor %}
+
+        </div>
+    {% endif %}
+
+
+    {% if user_can_view_full_article %}
+        {% include_block page.body %}
+    {% else %}
+        <a href="/subscribe" class="btn btn-outline btn-success">
+            Subscribe now for full access.
+        </a>
+
+        {{ page.teaser | richtext }}
+    {% endif %}
+
+    <p>
+        <a href="{{ page.get_parent.url }}">
+            Return to "{{ page.get_parent.title }}" issue
+        </a>
+    </p>
+{% endblock %}
+
+{% block extra_css %}
+<style type="text/css">
+blockquote {
+	margin: 0 0 0 1em;
+	background: aliceblue;
+	padding: 1em;
+	font-size: 2em;
+	float: right;
+	width: 50%;
+}
+</style>
+{% endblock extra_css %}

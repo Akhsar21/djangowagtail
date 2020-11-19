@@ -1,0 +1,26 @@
+{% load wagtailcore_tags %}
+<div class="card mb-2">
+    <div class="card-body">
+        <a href="{% pageurl article %}" class="card-title lead">
+            {{ article.title }}
+        </a>
+
+        {% if article.authors.count %}
+            <ul class="list-inline mb-1">
+                <li class="list-inline-item">Authored by:</li>
+                {% for author in article.authors.all %}
+                    <li class="list-inline-item">
+                        <a href="{% pageurl author.author %}">{{ author.author.title }}</a>{% if not forloop.last %},{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {{ article.teaser | richtext }}
+
+        Issue:
+        <a href="{% pageurl article.get_parent %}" class="card-link">
+            {{ article.get_parent }} ({{ article.get_parent.specific.publication_date| date:"F Y" }})
+        </a>
+    </div>
+</div>
